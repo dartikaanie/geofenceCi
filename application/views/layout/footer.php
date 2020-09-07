@@ -1,13 +1,7 @@
-<!-- Sticky Footer -->
-<footer class="py-4 bg-light mt-auto">
-    <div class="container-fluid">
-        <div class="d-flex align-items-center justify-content-between small">
-            <div class="text-muted">Copyright &copy; Your Website 2020</div>
-            <div>
-                <a href="#">Privacy Policy</a>
-                &middot;
-                <a href="#">Terms &amp; Conditions</a>
-            </div>
-        </div>
+<footer class="main-footer">
+    <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+    All rights reserved.
+    <div class="float-right d-none d-sm-inline-block">
+        <b>Version</b> 3.1.0-pre
     </div>
 </footer>

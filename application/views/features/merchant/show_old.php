@@ -7,9 +7,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <html lang="en">
 <head>
     <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
-    <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
-    <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.css" />
-    <script src="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.js"></script>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
     <?php $this->load->view("layout/head.php") ?>
 </head>
@@ -19,64 +16,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <div id="wrapper">
 
-    <?php $this->load->view("layout/sidebar.php") ?>
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-12">
-                        <h1><?php echo strtoupper($data_merchant[0]->merchant_name) ?></h1>
-                    </div><!-- /.col -->
-                </div>
-            </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h3><?php echo strtoupper($data_merchant[0]->merchant_name) ?></h3>
         </div>
-
-        <section class="content">
-            <div class="container-fluid">
-                <!-- Small boxes (Stat box) -->
-                <div class="row">
-                    <div class="col-md-12" >
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="map" style="width: 100%; height: 400px;"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-12" >
-                        <div class="card">
-                            <div class="card-body">
-                                <table id="table_edc" class="table table-striped">
-                                    <thead>
-                                        <td>Date time</td>
-                                        <td>Serial Number</td>
-                                        <td>Potition</td>
-                                        <td>Status</td>
-                                    </thead>
-                                    <tr>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
     </div>
+    <div id="content-wrapper">
 
-    <?php $this->load->view("layout/footer.php") ?>
-
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
-    </aside>
-    <!-- /.control-sidebar -->
-</div>
-<?php $this->load->view("layout/script.php") ?>
+        <div class="container-fluid">
+            <div id="map" style="width: 800px; height: 500px;"></div>
+        </div>
+        <?php $this->load->view("layout/script.php") ?>
 
 </body>
 </html>
-
 
 <script>
     markers=[];
@@ -95,7 +48,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         fillOpacity: 0.5
     }).addTo(map);
 
-    initMap();
+   initMap();
 
     function initMap() {
         getEdc();
@@ -124,25 +77,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                 for ( var i=0; i < markers[0].length; i++ )
                 {
-                    let status ="";
                     let distance = getDistance(lat,lng, markers[0][i].lat,  markers[0][i].lng);
                     if(distance<radius){
                         L.marker([markers[0][i].lat, markers[0][i].lng], {icon: iconIn})
                             .bindPopup(markers[0][i].serial_number)
                             .openPopup().addTo(map);
-                        status ="<label class='right badge badge-success'>IN</label>"
                     }else{
                         L.marker([markers[0][i].lat, markers[0][i].lng], {icon: iconOut})
                             .bindPopup(markers[0][i].serial_number)
                             .openPopup().addTo(map);
-                        status ="<label class='right badge badge-danger'>OUT</label>"
                     }
-
-                    var newRow=document.getElementById('table_edc').insertRow();
-                     newRow.innerHTML = "<td>"+ markers[0][i].datetime + "</td>" +
-                         "<td>"+ markers[0][i].serial_number + "</td>" +
-                         "<td>"+ markers[0][i].lat + " , "+markers[0][i].lng + "</td>" +
-                         "<td>"+ status +"</td>";
                 }
             }
         }, 2000);
@@ -158,7 +102,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             data: "",
             dataType: 'json',
             success: function (rows) {
-                markers.push(rows);
+                    markers.push(rows);
             }
         });
     }
