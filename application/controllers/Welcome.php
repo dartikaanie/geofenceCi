@@ -7,6 +7,6 @@ class Welcome extends CI_Controller {
         $this->load->model('EdcModel');
         $data['data_edc'] = $this->EdcModel->getAllDataEdc();
 
-        $this->load->view('edc/index', $data);
+        $this->load->view('features/edc/index', $data);
     }
 }

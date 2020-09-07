@@ -50,11 +50,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 
+//API
+$route['api/log']= 'api/Api/api';
+
 $route['edc'] = 'EdcController/index';
-$route['merchant'] = 'MerchantController/index';
 $route['log'] = 'LogController/index';
 
-$route['api/log']= 'api/Api/api';
+$route['merchant'] = 'MerchantController/index';
+$route['merchant/show/(:any)'] = 'MerchantController/show/$1';
+$route['merchant/show/(:any)/getEdc'] = 'MerchantController/getEdc/$1';
+$route['merchant/add'] = 'MerchantController/create';
+$route['merchant/store'] = 'MerchantController/store';
+
+
 
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';

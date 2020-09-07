@@ -14,7 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <div id="wrapper">
 
-<!--    --><?php //$this->load->view("layout/sidebar.php") ?>
+    <?php $this->load->view("layout/sidebar.php") ?>
 
     <div id="content-wrapper">
 
@@ -38,7 +38,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </div>
 <!-- /#wrapper -->
 
-<?php //$this->load->view("layout/script.php") ?>
+<?php $this->load->view("layout/script.php") ?>
 
 </body>
 </html>

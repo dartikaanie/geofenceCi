@@ -16,7 +16,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <div class="panel panel-default">
         <div class="panel-body">
-            <h3>Data Merchant</h3>
+            <h3>Data Store
+            <a class="btn btn-primary pull-right" href="<?php echo site_url('merchant/add'); ?>"> + Add Store</a>
+            </h3>
         </div>
     </div>
 
@@ -37,6 +39,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <td><?php echo $item->merchant_id;?></td>
                         <td><?php echo $item->merchant_name;?></td>
                         <td><?php echo $item->lat;?> ,  <?php echo $item->lng;?></td>
+                        <td><a class="btn btn-info" href="<?php echo site_url('merchant/show/'. $item->merchant_id); ?>">detail</a> </td>
                     </tr>
                 <?php endforeach;?>
                 </tbody>

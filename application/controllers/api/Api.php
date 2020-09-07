@@ -26,16 +26,15 @@ class Api extends \ciGeofenceTestV3\RestServer\RestController
             $mLat = $edc[0]->lat;
             $mLng = $edc[0]->lng;
             $distance = $this->distanceBetween($eLat, $eLng, $mLat, $mLng);
-
-
             $radius = 100;
+
 
             if($distance > $radius){
                 try{
-                    $this->LogModel->addData($edc_id,$eLng,$eLat);
+                    $this->LogModel->addData($edc_id,$eLat,$eLng );
                     $insert = true;
-                }catch (Exception $ex){
-                    print_r($ex);
+                }catch (Exception $e){
+                    $ex = $e;
                 }
             }
         }
