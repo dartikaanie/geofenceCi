@@ -32,7 +32,7 @@
 <!-- AdminLTE for demo purposes -->
 <script src="<?php echo  base_url('dist/js/demo.js')?>"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?php echo  base_url('dist/js/pages/dashboard.js')?>"></script>
+<!--<script src="--><?php //echo  base_url('dist/js/pages/dashboard.js')?><!--"></script>-->
 
 <!-- DataTables -->
 <script src="<?php echo  base_url('plugins/datatables/jquery.dataTables.min.js')?>"></script>

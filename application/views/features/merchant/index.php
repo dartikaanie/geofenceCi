@@ -8,7 +8,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <head>
     <?php $this->load->view("layout/head.php") ?>
 </head>
-<body id="page-top">
+<body class="hold-transition sidebar-mini layout-fixed">
 
 <?php $this->load->view("layout/navbar.php") ?>
 

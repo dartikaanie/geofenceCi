@@ -13,7 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
     <?php $this->load->view("layout/head.php") ?>
 </head>
-<body id="page-top">
+<body class="hold-transition sidebar-mini layout-fixed">
 
 <?php $this->load->view("layout/navbar.php") ?>
 

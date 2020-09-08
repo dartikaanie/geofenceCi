@@ -18,12 +18,10 @@ class LogModel extends CI_Model {
     }
 
     public function addData($edc_id,$lat,$lng){
-        $datetime =  date("Y-m-d H:m:s");
         $data = array(
             "edc_id"=>$edc_id,
             "lat"=>$lat,
-            "lng"=>$lng,
-            "datetime" => $datetime
+            "lng"=>$lng
         );
         $this->db->insert("log_potition_edc", $data);
     }
