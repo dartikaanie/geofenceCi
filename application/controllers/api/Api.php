@@ -15,13 +15,14 @@ class Api extends \ciGeofenceTestV3\RestServer\RestController
     }
 
     public function api_post(){
-        $edc_id = $this->post("id");
+        $edc_sn = $this->post("SN");
+        $edc_dm = $this->post("DM");
         $eLat = $this->post("lat");
         $eLng = $this->post("lng");
 
         $insert = false;
         $ex=null;
-        $edc = $this->EdcModel->getSingleData($edc_id);
+        $edc = $this->EdcModel->getSingleData($edc_sn,$edc_dm);
         if($edc != null){
             $mLat = $edc[0]->lat;
             $mLng = $edc[0]->lng;
@@ -31,7 +32,7 @@ class Api extends \ciGeofenceTestV3\RestServer\RestController
 
             if($distance > $radius){
                 try{
-                    $this->LogModel->addData($edc_id,$eLat,$eLng );
+                    $this->LogModel->addData($edc[0]->id,$eLat,$eLng );
                     $insert = true;
                 }catch (Exception $e){
                     $ex = $e;

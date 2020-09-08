@@ -53,7 +53,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <td><?php echo $item->merchant_id;?></td>
                                             <td><?php echo $item->merchant_name;?></td>
                                             <td><?php echo $item->lat;?> ,  <?php echo $item->lng;?></td>
-                                            <td><a class="btn btn-info" href="<?php echo site_url('merchant/show/'. $item->merchant_id); ?>">detail</a> </td>
+                                            <td> <center><a class="btn btn-info btn-sm" href="<?php echo site_url('merchant/show/'. $item->merchant_id); ?>"><i class="fa fa-eye"></i> </a></center> </td>
                                         </tr>
                                     <?php endforeach;?>
                                     </tbody>
