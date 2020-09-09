@@ -97,6 +97,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     initMap();
 
+
     function initMap() {
         getEdc();
 

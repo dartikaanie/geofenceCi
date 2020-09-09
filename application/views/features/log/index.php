@@ -37,17 +37,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="card">
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <table id="example1" class="table table-bordered table-striped">
+                                <table class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
+                                        <th><strong>NO</strong></th>
                                         <th><strong>DATE TIME</strong></th>
                                         <th><strong>SERIAL NUMBER EDC</strong></th>
                                         <th><strong>LOG</strong></th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <?php foreach ($data_edc as $item):?>
+                                    <?php
+                                    $n=0;
+                                    foreach ($data_edc as $item):?>
                                         <tr>
+                                            <td><?php echo ++$n;?></td>
                                             <td><?php echo $item->datetime;?></td>
                                             <td><?php echo $item->serial_number;?></td>
                                             <td><?php echo $item->lat;?> , <?php echo $item->lng;?></td>
@@ -55,6 +59,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <?php endforeach;?>
                                     </tbody>
                                 </table>
+                                <p><?php echo $links; ?></p>
                             </div>
                         </div>
                     </div>
@@ -71,6 +76,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- /.control-sidebar -->
 </div>
 <?php $this->load->view("layout/script.php") ?>
+
+
+
 <script>
     $(function () {
         $("#example1").DataTable({

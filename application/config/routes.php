@@ -55,6 +55,7 @@ $route['api/log']= 'api/Api/api';
 
 $route['edc'] = 'EdcController/index';
 $route['log'] = 'LogController/index';
+$route['log/(:num)'] = 'LogController/index';
 
 $route['merchant'] = 'MerchantController/index';
 $route['merchant/show/(:any)'] = 'MerchantController/show/$1';

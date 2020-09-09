@@ -8,11 +8,15 @@
 
 class LogModel extends CI_Model {
 
-    public function getAllDataLog()
+
+
+    public function getAllDataLog($limit, $start)
     {
-        $this->db->select('log_potition_edc.* , edc.*');
+        $this->db->select('*');
         $this->db->from('log_potition_edc');
-        $this->db->join('edc', 'edc.id = log_potition_edc.edc_id', 'inner join');
+        $this->db->join('edc', 'edc.id = log_potition_edc.edc_id');
+        $this->db->order_by("log_potition_edc.datetime", "DESC");
+        $this->db->limit($limit, $start);
         $query = $this->db->get();
         return $query->result();
     }
@@ -24,6 +28,10 @@ class LogModel extends CI_Model {
             "lng"=>$lng
         );
         $this->db->insert("log_potition_edc", $data);
+    }
+
+    public function get_count() {
+        return $this->db->count_all("log_potition_edc");
     }
 
 
