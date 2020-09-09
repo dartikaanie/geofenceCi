@@ -113,7 +113,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     var feature;
     var markers = [];
     var marker;
-
+    
     var map = L.map('map');
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
@@ -121,6 +121,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     L.control.scale().addTo(map);
 
     getLocation();
+
 
     function chooseAddress(lat, lng) {
         map.setView({lon: lng, lat: lat}, 14);
@@ -156,6 +157,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     }
 
     function getLocation() {
+        let cek = true;
         map.locate({
             setView: true,
             enableHighAccuracy: true
@@ -166,7 +168,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     .bindPopup("Your Position")
                     .openPopup();
                 markers.push(marker);
+                cek = false;
             });
+
+        setTimeout(function() {
+            if (cek) {
+                map.setView({lon: 106.819282, lat: -6.210665}, 18);
+                marker = L.marker({lon: 106.819282, lat: -6.210665}).addTo(map)
+                    .bindPopup("Your Position")
+                    .openPopup();
+                markers.push(marker);
+            }
+            console.log(cek)
+        },2000);
+
     }
 
     map.on('click', function(evt) {
