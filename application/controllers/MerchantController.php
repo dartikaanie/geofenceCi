@@ -10,7 +10,7 @@ class MerchantController extends CI_Controller
 {
     function __construct()
     {
-        // Construct the parent class
+        // Construct the parent class]
         parent::__construct();
         $this->load->model('MerchantModel');
     }
@@ -69,7 +69,7 @@ class MerchantController extends CI_Controller
     function delete(){
         $merchant_id = $this->input->post("merchant_id");
         $this->MerchantModel->deleteData($merchant_id);
-
+        return $this->load->view('myPages');
         redirect('merchant');
     }
 

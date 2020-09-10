@@ -68,7 +68,6 @@ $route['merchant/update'] = 'MerchantController/update';
 $route['merchant/delete'] = 'MerchantController/delete';
 
 
-
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

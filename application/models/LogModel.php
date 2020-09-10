@@ -9,6 +9,12 @@
 class LogModel extends CI_Model {
 
 
+    public function __construct()
+    {
+        $this->timestamps = TRUE ;
+        $this->soft_deletes = TRUE;
+        parent::__construct();
+    }
 
     public function getAllDataLog($limit, $start)
     {
