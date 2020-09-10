@@ -52,6 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 //API
 $route['api/log']= 'api/Api/api';
+$route['api/getLastLog']= 'api/Api/getLastLog';
 
 $route['edc'] = 'EdcController/index';
 $route['log'] = 'LogController/index';
@@ -62,6 +63,9 @@ $route['merchant/show/(:any)'] = 'MerchantController/show/$1';
 $route['merchant/show/(:any)/getEdc'] = 'MerchantController/getEdc/$1';
 $route['merchant/add'] = 'MerchantController/create';
 $route['merchant/store'] = 'MerchantController/store';
+$route['merchant/edit/(:any)'] = 'MerchantController/edit/$1';
+$route['merchant/update'] = 'MerchantController/update';
+$route['merchant/delete'] = 'MerchantController/delete';
 
 
 

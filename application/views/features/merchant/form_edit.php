@@ -29,7 +29,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-10">
-                        <h1 class="m-0 text-dark">Data Store</h1>
+                        <h1 class="m-0 text-dark">Edit Data Store <?php echo strtoupper($data_merchant[0]->merchant_name) ?></h1>
                     </div><!-- /.col -->
                     <div class="col-sm-2 pull-right">
                         <a class="btn btn-primary pull-left" href="<?php echo site_url('merchant/add'); ?>"> <i class="fa fa-plus"></i> Add Store</a>
@@ -47,51 +47,52 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="card">
                             <br>
                             <div class="card-group" style="margin-left: 15px; margin-right: 15px">
-                                 <input class="form-control col-md-11 pull-left"  name="address" value="" id="address" onchange="searchCoordinat()"/>
+                                <input class="form-control col-md-11 pull-left"  name="address" value="" id="address" onchange="searchCoordinat()"/>
                                 <button class="btn btn-default btn-sm col-md-1"  onclick="searchCoordinat()"> <i class="fa fa-search"></i></button>
                             </div>
-                                <p  style="margin-left: 15px" id="results"></p>
-                            </div>
-
-
+                            <p  style="margin-left: 15px" id="results"></p>
                         </div>
+
+
                     </div>
+                </div>
                 <div class="row">
-                        <div class="col-md-8" >
-                            <div class="card">
-                                <div id="map" style="width: 100%; height: 410px;"></div>
-                            </div>
+                    <div class="col-md-8" >
+                        <div class="card">
+                            <div id="map" style="width: 100%; height: 410px;"></div>
                         </div>
+                    </div>
 
-                        <div class="col-md-4">
-                            <div class="card">
-                                <!-- /.card-header -->
-                                <div class="card-body">
-                                    <form action="<?php echo site_url('merchant/store'); ?>" method="post">
-                                        <label>Name :</label>
-                                        <input class="form-control" name="merchant_name" placeholder="Name. . .">
-                                        <br>
-                                        <label>Lat :</label>
-                                        <input class="form-control" type="text" readonly id="lat" name="lat" placeholder="Lattitude. . .">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <form action="<?php echo site_url('merchant/update'); ?>" method="post">
+                                    <input name="merchant_id" value="<?php echo  $data_merchant[0]->merchant_id; ?>" hidden>
+                                    <label>Name :</label>
+                                    <input class="form-control" name="merchant_name" value="<?php echo strtoupper($data_merchant[0]->merchant_name) ?>">
+                                    <br>
+                                    <label>Lat :</label>
+                                    <input class="form-control" type="text" readonly id="lat" name="lat" value="<?php echo strtoupper($data_merchant[0]->lat) ?>">
 
-                                        <br>
-                                        <label>Long :</label>
-                                        <input class="form-control"  type="text"   readonly  id="lng" name="lng" placeholder="Longitude. . .">
+                                    <br>
+                                    <label>Long :</label>
+                                    <input class="form-control"  type="text"   readonly  id="lng" name="lng" value="<?php echo strtoupper($data_merchant[0]->lng) ?>">
 
-                                        <br>
-                                        <label>Radius (m) :</label>
-                                        <input type="range" id="radius" name="radius" min="100" class="col-md-12" max="10000" value="100"
-                                               oninput="amount.value=radius.value">
-                                        <output id="amount" name="amount" for="rangeInput">100</output>
+                                    <br>
+                                    <label>Radius (m) :</label>
+                                    <input type="range" id="radius" name="radius" min="100" class="col-md-12" max="10000" value="<?php echo strtoupper($data_merchant[0]->radius) ?>"
+                                           oninput="amount.value=radius.value" onchange="setRadius(this.value)">
+                                    <output id="amount" name="amount" for="rangeInput"><?php echo strtoupper($data_merchant[0]->radius) ?></output>
 
-                                        <input type="submit" value="Add" class="btn btn-success" style="float: right; margin-left: 10px">
-                                        <a class="btn btn-default"  style="float: right;" href="javascript:history.go(-1)"> cancel </a>
+                                    <input type="submit" value="Update" class="btn btn-success" style="float: right; margin-left: 10px">
+                                    <a class="btn btn-default"  style="float: right;" href="javascript:history.go(-1)"> cancel </a>
 
-                                    </form>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>
+                </div>
             </div>
         </section>
     </div>
@@ -110,10 +111,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 <script>
-    var feature;
     var markers = [];
     var marker;
-    
+    var circles =[];
+
     var map = L.map('map');
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
@@ -122,12 +123,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     getLocation();
 
-
     function chooseAddress(lat, lng) {
         map.setView({lon: lng, lat: lat}, 14);
         marker =  L.marker({lon:lng, lat:  lat}).addTo(map);
-        document.getElementById("lat").value = lat;
-        document.getElementById("lng").value = lng;
         markers.push(marker);
     }
 
@@ -135,8 +133,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         var input = document.getElementById("address");
 
         $.getJSON('http://nominatim.openstreetmap.org/search?format=json&limit=5&q=' + input.value +'&polygon_geojson=1', function(data) {
-          console.log(data);
-          var items = [];
+            console.log(data);
+            var items = [];
 
             $.each(data, function(key, val) {
                 lat = val.lat;
@@ -157,31 +155,29 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     }
 
     function getLocation() {
-        let cek = true;
-        map.locate({
-            setView: true,
-            enableHighAccuracy: true
-        })
-            .on('locationfound', function(e) {
-                map.setView({lon: e.longitude, lat: e.latitude}, 18);
-                marker =  L.marker({lon: e.longitude, lat:  e.latitude}).addTo(map)
-                    .bindPopup("Your Position")
-                    .openPopup();
-                markers.push(marker);
-                cek = false;
-            });
+        map.setView({lon: <?php echo strtoupper($data_merchant[0]->lng) ?>, lat: <?php echo strtoupper($data_merchant[0]->lat) ?>}, 14);
+        marker =  L.marker({lon:<?php echo strtoupper($data_merchant[0]->lng) ?>, lat:  <?php echo strtoupper($data_merchant[0]->lat) ?>}).addTo(map).bindPopup("Old Position") .openPopup();
 
-        setTimeout(function() {
-            if (cek) {
-                map.setView({lon: 106.819282, lat: -6.210665}, 18);
-                marker = L.marker({lon: 106.819282, lat: -6.210665}).addTo(map)
-                    .bindPopup("Your Position")
-                    .openPopup();
-                markers.push(marker);
-            }
-            console.log(cek)
-        },2000);
+        let circle = L.circle({lon:<?php echo $data_merchant[0]->lng?>, lat:  <?php echo $data_merchant[0]->lat?>}, <?php echo $data_merchant[0]->radius?>, {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.7
+        }).addTo(map);
+        circles.push(circle);
+    }
 
+    function setRadius(rad){
+        // if (circles.length > 1) {
+        //     map.removeLayer(circles.pop());
+        // }
+
+        console.log(rad);
+        let circle = L.circle({lon:document.getElementById("lat").value, lat:  document.getElementById("lng").value}, rad, {
+            color: 'red',
+            fillColor: '#2a27ff',
+            fillOpacity: 0.5
+        }).addTo(map);
+        circles.push(circle);
     }
 
     map.on('click', function(evt) {

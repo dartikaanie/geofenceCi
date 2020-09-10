@@ -25,9 +25,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-12">
+                    <div class="col-sm-1 pull-right">
+                        <div class="btn-group">
+                            <a class="btn btn-warning btn-sm" href="<?php echo site_url('merchant/edit/'. $data_merchant[0]->merchant_id); ?>"><i class="fa fa-edit"></i> </a>
+                            <form action="<?php echo site_url('merchant/delete'); ?>" method="post">
+                                <input name="merchant_id" value="<?php echo  $data_merchant[0]->merchant_id; ?>" hidden>
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-sm-10">
                         <h1><?php echo strtoupper($data_merchant[0]->merchant_name) ?></h1>
-                    </div><!-- /.col -->
+                    </div>
                 </div>
             </div>
         </div>

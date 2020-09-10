@@ -34,6 +34,19 @@ class LogModel extends CI_Model {
         return $this->db->count_all("log_potition_edc");
     }
 
+    public function getLastLog($sn, $dm){
+        $this->db->select('*');
+        $this->db->from('log_potition_edc');
+        $this->db->join('edc', 'edc.id = log_potition_edc.edc_id');
+        $this->db->where('serial_number', $sn);
+        $this->db->where('device_model',$dm);
+        $this->db->order_by("log_potition_edc.datetime", "DESC");
+        $this->db->limit(1);
+        $query = $this->db->get();
+
+        return $query->result();
+    }
+
 
 
 

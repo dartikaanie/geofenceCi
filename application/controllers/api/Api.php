@@ -72,4 +72,28 @@ class Api extends \ciGeofenceTestV3\RestServer\RestController
         $m = $r * $c *1000;
         return $m;
     }
+
+    //get last log
+    public function getLastLog_get(){
+        $sn = $this->get("sn");
+        $dm = $this->get("dm");
+
+        try{
+            $data = $this->LogModel->getLastLog($sn, $dm);
+        }catch (Exception $ex){
+            return $ex;
+        }
+
+        if($data){
+            $response['status']=200;
+            $response['error']=false;
+            $response['data']= $data;
+            $response['message']='Success';
+        }else{
+            $response['status']=502;
+            $response['error']=true;
+            $response['message']='Failed';
+        }
+        $this->response($response);
+    }
 }

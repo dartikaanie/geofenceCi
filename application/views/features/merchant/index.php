@@ -34,6 +34,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="container-fluid">
                 <!-- Small boxes (Stat box) -->
                 <div class="row">
+
                     <div class="col-md-12">
                         <div class="card">
                             <!-- /.card-header -->
@@ -53,7 +54,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <td><?php echo $item->merchant_id;?></td>
                                             <td><?php echo $item->merchant_name;?></td>
                                             <td><?php echo $item->lat;?> ,  <?php echo $item->lng;?></td>
-                                            <td> <center><a class="btn btn-info btn-sm" href="<?php echo site_url('merchant/show/'. $item->merchant_id); ?>"><i class="fa fa-eye"></i> </a></center> </td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <a class="btn btn-info btn-sm" href="<?php echo site_url('merchant/show/'. $item->merchant_id); ?>"><i class="fa fa-eye"></i> </a>
+                                                    <a class="btn btn-warning btn-sm" href="<?php echo site_url('merchant/edit/'. $item->merchant_id); ?>"><i class="fa fa-edit"></i> </a>
+                                                    <form action="<?php echo site_url('merchant/delete'); ?>" method="post" onclick="return confirm('Are you sure you want to delete this store?');">
+                                                        <input name="merchant_id" value="<?php echo  $item->merchant_id; ?>" hidden>
+                                                        <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>
+                                                    </form>
+
+                                                </div>
+                                            </td>
                                         </tr>
                                     <?php endforeach;?>
                                     </tbody>
