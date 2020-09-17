@@ -1,6 +1,10 @@
 <?php
+require (APPPATH.'libraries/RestController.php');
+require (APPPATH.'libraries/JWT.php');
 
-require APPPATH . 'libraries\RestController.php';
+use \Firebase\JWT\JWT;
+use \Firebase\JWT\SignatureInvalidException;
+
 
 
 class Api extends \ciGeofenceTestV3\RestServer\RestController
@@ -14,28 +18,48 @@ class Api extends \ciGeofenceTestV3\RestServer\RestController
         $this->load->model('EdcModel');
     }
 
-    public function api_post(){
-        $edc_sn = $this->post("SN");
-        $edc_dm = $this->post("DM");
-        $eLat = $this->post("lat");
-        $eLng = $this->post("lng");
 
+    private function getPublicKey(){
+        $pub_key = openssl_pkey_get_public(file_get_contents('assets/my_ca.cer'));
+        $keyData = openssl_pkey_get_details($pub_key);
+//        file_put_contents('./key.pub', $keyData['key']);
+        return $keyData['key'];
+    }
+
+    public function api_post(){
         $insert = false;
         $ex=null;
-        $edc = $this->EdcModel->getSingleData($edc_sn,$edc_dm);
+        $edc = null;
+        $jwt = $this->input->get_request_header('token');
+        try {
+            $decode = JWT::decode($jwt, $this->getPublicKey(), array('HS256'));
+
+        } catch (Exception $ex){
+            $ex="token failed";
+        }catch(SignatureInvalidException $e ) {
+            $ex = "token failed";
+        }
+
+        if($decode){
+            $edc = $this->EdcModel->getSingleData($decode->sn, $decode->dm);
+        }
         if($edc != null){
-            $mLat = $edc[0]->lat;
-            $mLng = $edc[0]->lng;
-            $distance = $this->distanceBetween($eLat, $eLng, $mLat, $mLng);
-            $radius = 100;
+            $eLat = $this->post("lat");
+            $eLng = $this->post("lng");
 
+            if($edc != null){
+                $mLat = $edc[0]->lat;
+                $mLng = $edc[0]->lng;
+                $distance = $this->distanceBetween($eLat, $eLng, $mLat, $mLng);
+                $radius = 100;
 
-            if($distance > $radius){
-                try{
-                    $this->LogModel->addData($edc[0]->id,$eLat,$eLng );
-                    $insert = true;
-                }catch (Exception $e){
-                    $ex = $e;
+                if($distance > $radius){
+                    try{
+                        $this->LogModel->addData($edc[0]->id,$eLat,$eLng );
+                        $insert = true;
+                    }catch (Exception $e){
+                        $ex = $e;
+                    }
                 }
             }
         }
@@ -74,7 +98,11 @@ class Api extends \ciGeofenceTestV3\RestServer\RestController
     }
 
     //get last log
+
     public function getLastLog_get(){
+
+
+
         $sn = $this->get("sn");
         $dm = $this->get("dm");
 
@@ -85,15 +113,62 @@ class Api extends \ciGeofenceTestV3\RestServer\RestController
         }
 
         if($data){
+            $tokenData = array();
+            $tokenData['sn'] = $sn;
+            $tokenData['dm'] = $dm;
+            $response['token'] = JWT::encode($tokenData, $this->getPublicKey());
+
             $response['status']=200;
             $response['error']=false;
             $response['data']= $data;
             $response['message']='Success';
+
         }else{
             $response['status']=502;
             $response['error']=true;
+            $response['token'] = "failed";
             $response['message']='Failed';
+
         }
         $this->response($response);
+
     }
+
+
+
+
+
+    function setupTcpStreamServer($pem_file, $pem_passphrase, $ip, $port) {
+
+//setup and listen to a tcp IP/port, returning the socket stream
+        //create a stream context for our SSL settings
+        $context = stream_context_create();
+
+        //Setup the SSL Options
+        stream_context_set_option($context, 'ssl', 'local_cert', $pem_file);  // Our SSL Cert in PEM format
+        stream_context_set_option($context, 'ssl', 'passphrase', $pem_passphrase); // Private key Password
+        stream_context_set_option($context, 'ssl', 'allow_self_signed', true);
+        stream_context_set_option($context, 'ssl', 'verify_peer', false);
+//
+        //create a stream socket on IP:Port
+
+        $socket = stream_socket_server("{$ip}:{$port}", $errno, $errstr, 30);
+        stream_socket_enable_crypto($socket, false);
+
+        return $socket;
+
+    }
+
+    function decrypt($ivHashCiphertext, $password) {
+        $method = "AES-256-CBC";
+        $iv = substr($ivHashCiphertext, 0, 16);
+        $hash = substr($ivHashCiphertext, 16, 32);
+        $ciphertext = substr($ivHashCiphertext, 48);
+        $key = hash('sha256', $password, true);
+
+        if (!hash_equals(hash_hmac('sha256', $ciphertext . $iv, $key, true), $hash)) return null;
+
+        return openssl_decrypt($ciphertext, $method, $key, OPENSSL_RAW_DATA, $iv);
+    }
+
 }

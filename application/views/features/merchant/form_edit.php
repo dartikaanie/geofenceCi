@@ -86,7 +86,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <output id="amount" name="amount" for="rangeInput"><?php echo strtoupper($data_merchant[0]->radius) ?></output>
 
                                     <input type="submit" value="Update" class="btn btn-success" style="float: right; margin-left: 10px">
-                                    <a class="btn btn-default"  style="float: right;" href="javascript:history.go(-1)"> cancel </a>
+                                    <a class="btn btn-default"  style="float: right;" href="<?php echo site_url('merchant'); ?>"> cancel </a>
 
                                 </form>
                             </div>

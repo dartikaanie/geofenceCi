@@ -53,6 +53,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //API
 $route['api/log']= 'api/Api/api';
 $route['api/getLastLog']= 'api/Api/getLastLog';
+$route['api/tes']= 'api/tes';
 
 $route['edc'] = 'EdcController/index';
 $route['log'] = 'LogController/index';

@@ -69,7 +69,6 @@ class MerchantController extends CI_Controller
     function delete(){
         $merchant_id = $this->input->post("merchant_id");
         $this->MerchantModel->deleteData($merchant_id);
-        return $this->load->view('myPages');
         redirect('merchant');
     }
 

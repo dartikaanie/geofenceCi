@@ -49,7 +49,6 @@ class LogModel extends CI_Model {
         $this->db->order_by("log_potition_edc.datetime", "DESC");
         $this->db->limit(1);
         $query = $this->db->get();
-
         return $query->result();
     }
 

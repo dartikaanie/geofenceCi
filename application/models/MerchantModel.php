@@ -63,8 +63,8 @@ class MerchantModel extends CI_Model {
 
     public function deleteData($id)
     {
-        $this->db->where('merchant_id', $id);
-        $this->db->delete('merchant');
+            $this->db->where('merchant_id', $id);
+            $this->db->delete('merchant');
     }
 
 
